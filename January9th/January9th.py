@@ -1,5 +1,5 @@
 import random
-
+import enum
 
 class GuessingGame:
 
@@ -16,3 +16,52 @@ class GuessingGame:
         return "Your guess was too high!"
 
 
+class Suit(enum.Enum):
+    Spades = 1
+    Hearts = 2
+    Clubs = 3
+    Diamonds = 4
+
+
+class Face(enum.Enum):
+    Ace = 14
+    Two = 2
+    Three = 3
+    Four = 4
+    Five = 5
+    Six = 6
+    Seven = 7
+    Eight = 8
+    Nine = 9
+    Ten = 10
+    Jack = 11
+    Queen = 12
+    King = 13
+
+
+class Card:
+
+    def __init__(self, suit, face):
+        self.suit = suit
+        self.face = face
+
+    def __str__(self):
+        return "{} of {}".format(self.face.name, self.suit.name)
+
+
+class Deck:
+
+    def __init__(self):
+        self.cards = []
+        for suit in Suit:
+            for face in Face:
+                self.cards.append( Card(suit, face) )
+
+    def print(self):
+        for card in self.cards:
+            print( card )
+
+if __name__ == "__main__":
+    new_deck = Deck()
+
+    new_deck.print()
