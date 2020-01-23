@@ -142,7 +142,6 @@ class EightQueens:
 
         return True
 
-
     def _is_row_safe(self, row):
         return self.QUEEN not in self.board[row]
 
