@@ -65,3 +65,7 @@ if __name__ == "__main__":
     new_deck = Deck()
 
     new_deck.print()
+
+    Card(Suit.Spades, Face.Ace)
+    Card(Suit.Spades, Face.King)
+
