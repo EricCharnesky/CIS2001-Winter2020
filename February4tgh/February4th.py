@@ -38,6 +38,7 @@ class MyQueue:
     def __len__(self):
         return len(self._data)
 
+# not as memory efficient
 class MyFasterQueue:
 
     def __init__(self):
@@ -70,6 +71,62 @@ class MyFasterQueue:
         self._now_serving = 0
 
 
+
+class CircularQueue:
+
+    DEFAULT_CAPACITY = 20
+
+    def __init__(self, initial_size = DEFAULT_CAPACITY):
+        self._data = [None] * initial_size
+        self._front = 0
+        self._back = 0
+        self._number_of_items = 0
+
+    def enqueue(self, item):
+        self._check_capacity()
+        self._data[self._back] = item
+        self._back += 1
+        if self._back == len(self._data):
+            self._back = 0
+        self._number_of_items += 1
+
+    def dequeue(self):
+        if self._number_of_items == 0:
+            raise IndexError
+        item = self._data[self._front]
+        self._data[self._front] = None
+        self._front += 1
+        if self._front == len(self._data):
+            self._front = 0
+        self._number_of_items -= 1
+        return item
+
+    def front(self):
+        if self._number_of_items == 0:
+            raise IndexError
+        return self._data[self._front]
+
+    def __len__(self):
+        return self._number_of_items
+
+    def _check_capacity(self):
+        if self._number_of_items >= len(self._data):
+            new_data = [None] * len(self._data) * 2
+            new_data_index = 0
+            for index in range(self._front, len(self._data)):
+                new_data[new_data_index] = self._data[index]
+                new_data_index += 1
+            for index in range(0, self._back):
+                new_data[new_data_index] = self._data[index]
+                new_data_index += 1
+            self._data = new_data
+            self._front = 0
+            self._back = self._number_of_items
+
+
+
+
+
 def non_recursive_binary_search(some_list, item_to_find):
     first_index = 0
     last_index = len(some_list) - 1
@@ -96,3 +153,10 @@ for number in range(1,10):
 
 while len(myStack) != 0:
     print(myStack.pop())
+
+
+circularQueue = CircularQueue()
+for number in range(1,30):
+    circularQueue.enqueue(number)
+    if number % 2:
+        circularQueue.dequeue()
