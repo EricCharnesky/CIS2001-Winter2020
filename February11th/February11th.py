@@ -59,7 +59,6 @@ class LinkedQueue:
         return self.front.item
 
 
-
 class LinkedList:
 
     def __init__(self):
@@ -67,20 +66,23 @@ class LinkedList:
         self._back = None
         self._number_of_items = 0
 
+    def __len__(self):
+        return self._number_of_items
+
     def append(self, item):
-        if self.front is None:
-            self.front = Node(item)
-            self.back = self.front
+        if self._front is None:
+            self._front = Node(item)
+            self._back = self._front
         else:
-            self.back.next = Node(item)
-            self.back = self.back.next
+            self._back.next = Node(item)
+            self._back = self._back.next
         self._number_of_items += 1
 
     def get(self, index):
         if index < 0 or index >= self._number_of_items:
             raise IndexError
 
-        current_node = self.first
+        current_node = self._front
         for current_index in range(index):
             current_node = current_node.next
         return current_node.item
@@ -99,8 +101,8 @@ class LinkedList:
 
         self._number_of_items += 1
 
-    def pop(self, index= -1):
-        if index == -1:
+    def pop(self, index=None):
+        if index is None:
             index = self._number_of_items - 1
         if index < 0 or index >= self._number_of_items:
             raise IndexError
@@ -108,24 +110,32 @@ class LinkedList:
         if index == 0:
             if self._front == self._back:
                 self._back = None
+            item = self._front.item
             self._front = self._front.next
+        else:
+            current_node = self._front
+            for next_node in range(index-1):
+                current_node = current_node.next
 
+            if current_node.next == self._back:
+                self._back = current_node
 
-        current_node = self._front
-        for next_node in range(index-1):
-            current_node = current_node.next
-        current_node.next = current_node.next.next
+            item = current_node.next.item
+            current_node.next = current_node.next.next
 
         self._number_of_items -= 1
+        return item
 
     def remove(self, item):
-        if self._front == None:
+        if self._front is None:
             raise IndexError
 
         if self._front.item == item:
             if self._front == self._back:
                 self._back = None
             self._front = self._front.next
+            self._number_of_items -= 1
+            return
 
         else:
             current_node = self._front
@@ -134,5 +144,8 @@ class LinkedList:
                     current_node.next = current_node.next.next
                     if current_node.next is None:
                         self._back = current_node
-        self._number_of_items -= 1
+                    self._number_of_items -= 1
+                    return
+            raise ValueError("item not found in list!")
+
 
