@@ -1,3 +1,41 @@
+#1.	Eric Charnesky says do not cheat!
+
+#2.	Because the position has the Node behind the scenes ( is a wrapper class around Node), you can add/remove around a node in a linked list in O(1)
+
+#3.	Class Course:
+
+class Course:
+def __init__(self):
+	self.Name = “”
+	self.Number = “”
+	self.Credits = 0
+	self.Cost_per_credit = 0
+
+def get_total_cost(self):
+	return self.Credits * self._cost_pre_credit
+
+#4 – 
+# AAA
+#Arrange
+Expected_credits = 4
+Cost_per_credit =500
+Expected_cost_for_course = 2000
+
+#act
+Cis2001 = Course()
+Cis2001.Credits = expected_credits
+Cis2001.cost_per_credit = cost_per_credit
+Actual_cost = cis2001.get_total_cost()
+
+#assert
+Self.assertEqual(expected_cost_for_course, actual_cost)
+
+#5.	Exhaustive enough to ensure every line of code is run when the tests are run.
+#Because we don’t trust the code we right to be accurate
+
+#6.	O(N) – because you have to fill the blank space by shifting everything after the index back
+
+
 #7
 def sum_of_even_columns(some_list):
     sum = 0
