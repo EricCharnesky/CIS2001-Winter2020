@@ -1,28 +1,78 @@
+class PriorityQueue:
+
+    def __init__(self):
+        self.storageTree = ArrayBasedBinaryTree()
+        self.number_of_items = 0
+
+    def add(self, item):
+        pass
+        # add to index of number_of_items in the internal heap/tree storage
+        # next position to keep a 'complete' heap form
+        # complete == every level is full and the leaf level is filling from the left
+        # recursively up-heap with the parent node
+        # if node is < parent, swap and recurse
+
+    def min(self):
+        if not self.is_empty():
+            return self.storageTree[0]
+        raise IndexError
+
+    def remove_min(self):
+        pass
+
+
 class ArrayBasedBinaryTree:
+
+    class Node:
+
+        def __init__(self, data, index):
+            self.data = data
+            self.index = index
 
     class Position:
 
-        def __init__(self, container, index, data):
+        def __init__(self, container, node):
             self.container = container
-            self.index = index
-            self.data = data
+            self.node = node
 
     def __init__(self):
-        self._root = None
-        self._storage = []
+        self._storage = [None] * 16
         self._size = 0
 
+    def root(self):
+        return self._make_position(self._storage[0])
+
+    def _make_position(self, node):
+        if node is None:
+            return None
+        return self.Position(self, node)
+
+    def _validate(self, position):
+        if not isinstance(position, self.Position):
+            raise TypeError
+
+        if position._container is not self:
+            raise ValueError
+
+        if position._node.index == -1:
+            raise ValueError
+
+        return position._node
+
     def left(self, position):
-        return self._make_position(self._storage[position.index * 2 + 1])
+        return self._make_position(self._storage[position.node.index * 2 + 1])
 
     def right(self, position):
-        return self._make_position(self._storage[position.index * 2 + 1])
+        return self._make_position(self._storage[position.node.index * 2 + 2])
 
     def parent(self, position):
-        if position.index % 2 == 0:
-            parent_index = (position.index - 1) // 2
+        if position.node.index == 0:
+            return None
+
+        if position.node.index % 2 == 0:
+            parent_index = (position.node.index - 1) // 2
         else:
-            parent_index = position.index // 2
+            parent_index = position.node.idex // 2
 
         return self._make_position(self._storage[parent_index])
 
