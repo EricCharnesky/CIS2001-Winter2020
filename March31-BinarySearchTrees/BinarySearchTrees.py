@@ -195,6 +195,53 @@ class BinarySearchTreeMap:
             yield position.element()._key
             position = self.after(position)
 
+    def delete(self, position):
+        if self._left(position) is not None and self._right(position) is not None:
+            replacement = self._subtree_last_position(self._left(position))
+            replacement_parent = self._parent(replacement)
+            replacement_left_child = self._left(replacement)
+            if replacement_left_child is not None:
+                replacement_parent._node._right = replacement_left_child._node
+                replacement_left_child._node._parent = replacement_parent._node
+            else:
+                replacement_parent._node._right = None
+
+            position._node._data = replacement._node._data
+        else:
+            if self._left(position) is not None:
+                child = self._left(position)
+            else:
+                child = self._right(position)
+            parent = self._parent(position)
+            if child is not None:
+                if parent is None:
+                    self._root = child._node
+                    child._node._parent = None
+                else:
+                    child._node._parent = parent._node
+                    if self._left(parent) == position:
+                        parent._node._left = child._node
+                    else:
+                        parent._node._right = child._node
+            else:
+                if parent is None:
+                    self._root = None
+                elif self._left(parent) == position:
+                    parent._node._left = None
+                else:
+                    parent._node._right = None
+
+        self._size -= 1
+
+
+    def __delitem__(self, key):
+        if self.is_empty():
+            raise KeyError
+        position = self._subtree_search(self._make_position(self._root), key)
+        if position is None:
+            raise KeyError
+        self.delete(position)
+
 my_binary_search_tree = BinarySearchTreeMap()
 my_binary_search_tree[10] = 10
 my_binary_search_tree[5] = 5
@@ -204,9 +251,27 @@ my_binary_search_tree[15] = 15
 my_binary_search_tree[12] = 12
 my_binary_search_tree[20] = 20
 
+
+print("Forwards")
 for key in my_binary_search_tree:
     print(key)
 
+print()
+print("Backwards")
+
+current = my_binary_search_tree.last()
+while current is not None:
+    print(current.element()._key)
+    current = my_binary_search_tree.before(current)
+
+
+del my_binary_search_tree[10]
+
+while not my_binary_search_tree.is_empty():
+    print("Forwards")
+    for key in my_binary_search_tree:
+        print(key)
+    my_binary_search_tree.delete(my_binary_search_tree.last())
 
 
 
